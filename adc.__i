@@ -1,0 +1,5 @@
+-c --cpu ARM7TDMI -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork 
+-I C:\Universidad\Keil\ARM\RV31\INC 
+-I C:\Universidad\Keil\ARM\CMSIS\Include 
+-I C:\Universidad\Keil\ARM\Inc\Philips 
+-o "adc.o" --omf_browse "adc.crf" --depend "adc.d" "ADC.c"
