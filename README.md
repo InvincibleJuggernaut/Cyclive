@@ -1,12 +1,12 @@
 # Cyclive - Cyclic Executive Scheduler
 
-A bare-metal implementation of a cyclic executive scheduler for the LPC2300 microcontroller, demonstrating real-time task scheduling with different task deadlines using timer-based interrupts.
+A bare-metal implementation of a cyclic executive scheduler for the LPC2378 microcontroller, demonstrating real-time task scheduling with different task deadlines using timer-based interrupts.
 
 ## Project Overview
 
-This project implements a **cyclic executive** scheduling pattern on the ARM LPC23xx microcontroller. A cyclic executive is a deterministic scheduling approach where tasks are executed at predetermined intervals within a fixed cycle, making it suitable for hard real-time systems.
+This project implements a **cyclic executive** scheduling pattern on the ARM LPC2378 microcontroller. A cyclic executive is a deterministic scheduling approach where tasks are executed at predetermined intervals within a fixed cycle, making it suitable for hard real-time systems.
 
-**Target Hardware:** LPC2300 ARM Cortex-M3 Microcontroller
+**Target Hardware:** LPC2378 ARM Cortex-M3 Microcontroller
 
 ## Architecture
 
@@ -26,11 +26,11 @@ The scheduler uses a **1 ms timer tick** as the base unit. All tasks are multipl
 
 ```
 Time (ms):  0    100    200    300    400    500    600    700    800    900    1000
-          |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
-Task A:   |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|      (100ms)
-Task B:   |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|      (100ms)
-Task C:   |     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx| (200ms)
-Calc:     |                                                                   |xxxxx| (1000ms)
+          |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+Task A:   |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |    (100ms)
+Task B:   |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |    (100ms)
+Task C:   |     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|     |xxxxx|    (200ms)
+Calc:     |     |     |     |     |     |     |     |     |     |     |     |xxxxx|    (1000ms)
 ```
 
 ### Core Components
@@ -106,7 +106,7 @@ The scheduler is **rate-monotonic** with the following characteristics:
 With 1 ms tick and 1 second major cycle:
 - Task A (100 ms period): Runs 10 times per second → 100 reads accumulated per channel
 - Task B (200 ms period): Runs 5 times per second → 50 reads accumulated
-- Task C (1 s period): Runs 1 time → calculates and displays
+- Task D (1 s period): Runs 1 time → calculates and displays
 - Total CPU utilization is predictable and analyzable
 
 ## Technical Specifications
@@ -148,20 +148,6 @@ Cyclive/
 3. Flash: Upload `ADC.hex` to LPC2300 via JTAG/SWD debugger
 4. Execute: Microcontroller runs cyclic executive immediately on power-up
 
-## Key Advantages of Cyclic Executive
-
-✓ **Predictability**: No context switching overhead; execution times are deterministic
-✓ **Simple**: Easy to analyze for hard real-time requirements
-✓ **Efficient**: Minimal runtime overhead; suitable for resource-constrained systems
-✓ **Debugging**: Task execution order is static and repeatable
-
-## Limitations & Trade-offs
-
-- **Less flexible**: Adding new tasks requires modifying the main schedule
-- **Fixed period**: Task periods must divide evenly into the major cycle
-- **No priority inversion protection**: All tasks have equal priority by design
-- **No dynamic task management**: Tasks cannot be added/removed at runtime
-
 ## Design Rationale
 
 This implementation demonstrates best practices for bare-metal real-time programming:
@@ -170,14 +156,12 @@ This implementation demonstrates best practices for bare-metal real-time program
 - **Voltage scaling**: Post-processes raw ADC values for meaningful readings
 - **Modular drivers**: LCD, Serial, and ADC functions are independently reusable
 
-## References
+## Limitations & Trade-offs
 
-- **LPC2300 User Manual**: ARM Cortex-M3 register definitions and peripheral specs
-- **Cyclic Executive Pattern**: Used in aerospace and automotive real-time systems (e.g., AUTOSAR)
-- **Rate-Monotonic Scheduling**: Theoretical foundation for deadline analysis
+- **Less flexible**: Adding new tasks requires modifying the main schedule
+- **Fixed period**: Task periods must divide evenly into the major cycle
+- **No priority inversion protection**: All tasks have equal priority by design
+- **No dynamic task management**: Tasks cannot be added/removed at runtime
 
----
 
-**Author**: InvincibleJuggernaut  
-**License**: See individual source files for copyright notices  
-**Last Updated**: December 2024
+
